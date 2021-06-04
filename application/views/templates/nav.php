@@ -123,7 +123,11 @@
                         </li> -->
 
 
-                        <li class="loggedin" id="btnChangepassword" style="display: none"><a href="#"><i class="fa fa-gear"></i>  Change Password</a></li>   
+                        <li class="loggedin" id="btnChangepassword" style="display: none"><a href="#"><i class="fa fa-gear"></i>  Change Password</a></li> 
+                        <!-- start added by jeelbert 06-01-21 --> 
+                        <li class="loggedin" style="display: none"><a href="sms_manager"><i class="fa fa-bell"></i>  SMS Manager</a></li>
+                        <li class="loggedin" style="display: none"><a href="api_key_manager"><i class="fa fa-key"></i>  API Key Manager</a></li>     
+                        <!-- end added by jeelbert 06-01-21 --> 
                         <li class="loggedin" id="btnLogout" style="display: none"><a href="#"><i class="fa fa-sign-out"></i>  Logout</a></li>   
                     </ul>
 

@@ -72,6 +72,10 @@ $route['information_systems'] = "portal/information_systems";
 $route['field_offices'] = "portal/field_offices";
 $route['view_caseload'] = "portal/view_caseload";
 
+#start added by jeelbert 06-01-21 
+$route['sms_manager'] = "portal/sms_manager";
+$route['api_key_manager'] = "portal/api_key_manager";
+#end added by jeelbert 06-01-21 
 
 $route['login'] = "Portal/index";
 $route['backup_restore'] = "Portal/backup_restore";

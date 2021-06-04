@@ -2167,7 +2167,381 @@ $.wms.dashboard = (function() {
 
 
     }
+    //start added by jeelbert 06-01-21
+    var __smsManager = function(){
+        $.wms.executeExternalGet('/ppa-api-uams/wsv1/api/fetchAllSMS').done(function (result) {
+            if(result.status === 'SUCCESS'){
+                var arr = [];
+                var p = result.payload;
+                var statusText = '';
+                var button = '';
+                var deliveryTime = '';
+                for(x=0; x<result.payload.length; x++){
+                    if(p[x].message_STATUS == 1 || p[x].message_STATUS == 3){
+                        statusText = '<p style="color:green;">Delivered</p>';
+                    }else if (p[x].message_STATUS == 4){
+                        statusText = '<p style="color:red;">Cancelled</p>';
+                    }else{
+                        statusText = '<p style="color:blue;">Pending</p>';
+                    }
 
+                    if(p[x].message_DELIVERYTIME == null){
+                        deliveryTime = 'N/A';
+                    }else{
+                        deliveryTime = p[x].message_DELIVERYTIME;
+                    }
+                    if(p[x].message_STATUS != 4){
+                        button = '<button class="btnCancel  btn btn-danger btnCancel" data-id="'+p[x].message_ID+'"><i class="fa fa-window-close"></i></button>';
+                    }else{
+                        button = '';
+                    }
+
+                    arr.push([
+                        "<b>"+(p[x].message_ID)+"</b>",
+                        p[x].INFO_SYSTEM_NAME,
+                        p[x].message_CONTENT,
+                        p[x].message_TO,
+                        p[x].message_DATETIME,
+                        deliveryTime,
+                        p[x].created_by,
+                        p[x].CREATED_DATE,
+                        p[x].lastmodified_by,
+                        p[x].LASTMODIFIED_DATE,
+                        statusText,
+                        button
+                    ]);
+                }
+                if ( $.fn.DataTable.isDataTable('#tblSMS') ) {
+                  $('#tblSMS').DataTable().destroy();
+                  $('#tblSMS tbody').empty();
+                }
+                var dtSMS = $("#tblSMS").DataTable({
+                    dom: 'Blfrtip',
+                    "scrollX": true,
+                    buttons: [
+                        {   extend: 'csv',
+                            exportOptions: {
+                                columns: [ 0, 1 ,2,3,4,5,6,7,8,9,10]
+                            }, title: "Information System List", download: 'open'
+                        },
+                        {   extend: 'pdfHtml5',
+                            exportOptions: {
+                                columns: [ 0, 1, 2,3,4,5,6,7,8,9,10]
+                            }, title: "Information System List", download: 'open'
+                        },
+                        {   extend: 'excelHtml5',
+                            exportOptions: {
+                                columns: [ 0, 1, 2,3,,4,5,6,7,8,9,10]
+                            }, title: "Information System List", download: 'open'
+                        },
+                    ],
+                    "columns": [
+                        { "width": "5%" },
+                        { "width": "20%" },
+                        { "width": "30%" },
+                        { "width": "5%" },
+                        { "width": "5%" },
+                        { "width": "5%" },
+                        { "width": "5%" },
+                        { "width": "5%" },
+                        { "width": "5%" },
+                        { "width": "5%" },
+                        { "width": "5%" },
+                        { "width": "5%" },
+                      ]
+                });
+                console.log(arr)
+                dtSMS.rows.add(arr).draw();
+                //Export Events
+                $(".dt-buttons").addClass("hidden")
+                $(".btnCSV").unbind('click').on("click",function(){ $(".buttons-csv").click(); })
+                $(".btnPDF").unbind('click').on("click",function(){ $(".buttons-pdf").click(); })
+                $(".btnXLS").unbind('click').on("click",function(){ $(".buttons-excel").click(); })
+                $("#tblSMS tbody").unbind("click").on("click", '.btnCancel', function(){
+                    $("#modalCancel").modal('toggle');
+                    var id = $(this).data('id');
+                    $("#btnCancelSubmit").unbind("click").on("click", function(){
+                        $(".errorMessage").html('');
+                        $(".successMessage").html('');
+                        $(this).attr("disabled", "disabled");
+                        var payload = {
+                            message_ID : id,
+                            LASTMODIFIED_BY : $.cookie("USER_ID")
+                        }
+                        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/cancelSms',JSON.stringify(payload)).done(function (result) { 
+                           if(result.status === 'SUCCESS'){
+                                $(".error").addClass('hidden');
+                                $(".successMessage").append('<strong>'+result.message+'</strong>')
+                                $(".success").removeClass('hidden'); 
+                                setTimeout(function() {
+                                    $("#btnCancelSubmit").removeAttr("disabled");
+                                    $(".success").addClass('hidden'); 
+                                    $("#modalCancel").modal('toggle'); 
+                                    __smsManager();
+                                }, 2000)
+                            }else{
+                                $(".errorMessage").append('<strong>'+result.message+'</strong>')
+                                $(".error").removeClass('hidden'); 
+                            } 
+                        });
+                    });
+                });
+            }else{
+                console.log(result.message)
+            }
+        });
+        var payload = { }
+        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/fetchApiKeyByStatus',JSON.stringify(payload)).done(function (result) { 
+            if(result.status === 'SUCCESS'){
+                $(".infoSystem").html('');
+                $(".infoSystem").append(`<option value="">-- Please Select Info System --</option>`);
+                for(x=0; x<result.payload.length; x++){
+                    $(".infoSystem").append(`
+                        <option value=${result.payload[x].api_key_HASH}>${result.payload[x].INFO_SYSTEM_NAME+' - '+result.payload[x].api_key_HASH}</option>
+                    `);
+                }
+            }else{
+                console.log(result.message)
+            }
+        });
+        $("#btnAddSubmit").unbind("click").on("click", function(){
+            if($.isNumeric($("#addRecipient").val()) && $("#addRecipient").val().length == 11){
+                $(".errorMessage").html('');
+                $(".successMessage").html('');
+                var payload = {
+                    api_key: $(".infoSystem").val(),
+                    message_CONTENT: $("#addMessage").val(),
+                    message_DATETIME: $("#addDate").val()+' '+$("#addTime").val(),
+                    message_TO: $("#addRecipient").val(),
+                    CREATED_BY: $.cookie("USER_ID")
+                }
+                console.log(payload)
+                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/insertSMSManually', JSON.stringify(payload)).done(function(result){
+                    if(result.status === 'SUCCESS'){
+                        $(".error").addClass('hidden');
+                        $(".successMessage").append('<strong>'+result.message+'</strong>')
+                        $(".success").removeClass('hidden'); 
+                        setTimeout(function() {
+                            $(".success").addClass('hidden'); 
+                            $("#addMessage").val("");
+                            $("#addDate").val("");
+                            $("#addTime").val("");
+                            $("#addRecipient").val("");
+                            $("#modalAdd").modal('toggle'); 
+                            __smsManager();
+                        }, 3000)
+                    }else{
+                        $(".errorMessage").append('<strong>'+result.message+'</strong>')
+                        $(".error").removeClass('hidden'); 
+                    }
+                });
+            }else{
+                $(".errorMessage").append('<strong>Plese provide a correct cellphone number</strong>')
+                $(".error").removeClass('hidden'); 
+            }
+        });
+    };
+    var __apiKeyManager = function(){
+        $.wms.executeExternalGet('/ppa-api-uams/wsv1/api/fetchApiKeyByStatus').done(function (result) {
+            if(result.status === 'SUCCESS'){
+                var p = result.payload;
+                var arr = [];
+                for(x=0; x<p.length; x++){
+                    var created_by = p[x].created_by;
+                    var lastmodified_by = p[x].lastmodified_by;
+                    var button2 = '';
+                    if(result.payload[x].status == 1 || result.payload[x].status == "1"){
+                        button2 = `
+                            <button class="btn-xs btn btn-warning btn-changeStatus" data-text="Are you sure you want to Deactivate this API Key?" data-status="2" data-id="${result.payload[x].api_key_ID}">
+                                <i class="fa fa-ban"></i>
+                            </button>
+                        `;
+                    }else{
+                        button2 = `
+                            <button class="btn-xs btn btn-success btn-changeStatus" data-text="Are you sure you want to Activate this API Key?" data-status="1" data-id="${result.payload[x].api_key_ID}">
+                                <i class="fa fa-check"></i>
+                            </button>
+                        `;
+                    }
+                    var button = `
+                        <button class="btn-xs btn btn-primary btn-edit" data-infoid="${result.payload[x].info_system_id}" data-id="${result.payload[x].api_key_ID}">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                    `+button2;
+                    arr.push(["<b>"+p[x].api_key_ID+"</b>",p[x].INFO_SYSTEM_NAME,p[x].api_key_HASH,created_by,p[x].created_date,lastmodified_by, p[x].lastmodified_date, button]);
+                }
+                if ( $.fn.DataTable.isDataTable('#tblApiKey') ) {
+                  $('#tblApiKey').DataTable().destroy();
+                  $('#tblApiKey tbody').empty();
+                }
+                var dtApiKey = $("#tblApiKey").DataTable({
+                    dom: 'Blfrtip',
+                    "scrollX": true,
+                    buttons: [
+                        {   extend: 'csv',
+                            exportOptions: {
+                                columns: [ 0, 1 ,2,3,4,5,6]
+                            }, title: "Information System List", download: 'open'
+                        },
+                        {   extend: 'pdfHtml5',
+                            exportOptions: {
+                                columns: [ 0, 1, 2,3,4,5,6]
+                            }, title: "Information System List", download: 'open'
+                        },
+                        {   extend: 'excelHtml5',
+                            exportOptions: {
+                                columns: [ 0, 1, 2,3,,4,5,6]
+                            }, title: "Information System List", download: 'open'
+                        },
+                    ],
+                    "columns": [
+                        { "width": "5%" },
+                        { "width": "30%" },
+                        { "width": "30%" },
+                        { "width": "10%" },
+                        { "width": "10%" },
+                        { "width": "10%" },
+                        { "width": "5%" },
+                        { "width": "5%" },
+                      ]
+                });
+                console.log(arr)
+                dtApiKey.rows.add(arr).draw();
+                //Export Events
+                $(".dt-buttons").addClass("hidden")
+                $(".btnCSV").unbind('click').on("click",function(){ $(".buttons-csv").click(); })
+                $(".btnPDF").unbind('click').on("click",function(){ $(".buttons-pdf").click(); })
+                $(".btnXLS").unbind('click').on("click",function(){ $(".buttons-excel").click(); })
+                
+                $("#tblApiKey tbody").unbind("click").on("click", '.btn-edit',function(){
+                    var id = $(this).data('id');
+                    var infoId = $(this).data('infoid');
+                    var payload = { }
+                    $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getIs',JSON.stringify(payload)).done(function (result) { 
+                        if(result.status === 'SUCCESS'){
+                            $(".updateInfoSystem").html('');
+                            $(".updateInfoSystem").append(`<option value="">-- Please Select Info System --</option>`);
+                            for(x=0; x<result.payload.length; x++){
+                                $(".updateInfoSystem").append(`
+                                    <option value=${result.payload[x].INFO_SYSTEM_ID}>${result.payload[x].INFO_SYSTEM_NAME}</option>
+                                `);
+                            }
+                            $(".updateInfoSystem").val(infoId)
+                        }else{
+                            console.log(result.message)
+                        }
+                    });
+                    console.log(infoId);
+                    $("#modalUpdate").modal('toggle');
+                    $("#btnUpdateSubmit").unbind("click").on("click", function(){
+                        $(".errorMessage").html('');
+                        $(".successMessage").html('');
+                        $(this).attr("disabled", "disabled");
+                        var payload = {
+                            lastmodified_by :$.cookie("USER_ID"), 
+                            info_system_id : $(".updateInfoSystem").val(),
+                            api_key_ID: id
+                        }
+                        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/updateApiKey',JSON.stringify(payload)).done(function (result) { 
+                            if(result.status === 'SUCCESS'){
+                                $(".error").addClass('hidden');
+                                $(".successMessage").append('<strong>API Key updated</strong>')
+                                $(".success").removeClass('hidden'); 
+                                setTimeout(function() {
+                                    $("#btnUpdateSubmit").removeAttr("disabled");
+                                    $(".success").addClass('hidden'); 
+                                    $("#modalUpdate").modal('toggle');
+                                    __apiKeyManager();
+                                }, 2000)
+                            }else{
+                                $(".errorMessage").append('<strong>'+result.message+'</strong>')
+                                $(".error").removeClass('hidden'); 
+                            }
+                        });
+                    });
+                });
+                $("#tblApiKey").unbind("click").on("click", '.btn-changeStatus',function(){
+                    $("#modalChangeStatus").modal('toggle');
+                    var text = $(this).data('text');
+                    $(".changeStatusText").html('');
+                    $(".changeStatusText").append(text);
+                    var id = $(this).data('id');
+                    var status = $(this).data('status');
+                    
+                    $("#btnChangeSubmit").unbind("click").on("click", function(){
+                        $(".errorMessage").html('');
+                        $(".successMessage").html('');
+                        $(this).attr("disabled", "disabled");
+                        var payload = {
+                            lastmodified_by :$.cookie("USER_ID"), 
+                            status : status,
+                            api_key_ID: id
+                        }
+                        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/updateApiKey',JSON.stringify(payload)).done(function (result) { 
+                            if(result.status === 'SUCCESS'){
+                                $(".error").addClass('hidden');
+                                $(".successMessage").append('<strong>API Key updated!</strong>')
+                                $(".success").removeClass('hidden'); 
+                                setTimeout(function() {
+                                    $(".success").addClass('hidden'); 
+                                    $("#btnChangeSubmit").removeAttr("disabled");
+                                    $("#modalChangeStatus").modal('toggle'); 
+                                    __apiKeyManager();
+                                }, 2000)
+                            }else{
+                                $(".errorMessage").append('<strong>'+result.message+'</strong>')
+                                $(".error").removeClass('hidden'); 
+                            }
+                        });
+                    });
+                });
+            }else{
+                console.log(result.message)
+            }
+        });
+        var payload = { }
+        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getIs',JSON.stringify(payload)).done(function (result) { 
+            if(result.status === 'SUCCESS'){
+                $(".infoSystem").html('');
+                $(".infoSystem").append(`<option value="">-- Please Select Info System --</option>`);
+                for(x=0; x<result.payload.length; x++){
+                    $(".infoSystem").append(`
+                        <option value=${result.payload[x].INFO_SYSTEM_ID}>${result.payload[x].INFO_SYSTEM_NAME}</option>
+                    `);
+                }
+            }else{
+                console.log(result.message)
+            }
+        });
+        $("#btnAddSubmit").unbind("click").on("click", function(){
+            $(".errorMessage").html('');
+            $(".successMessage").html('');
+            $(this).attr("disabled", "disabled");
+            var payload = {
+                created_by : $.cookie("USER_ID"),
+                info_system_id: $(".infoSystem").val(),
+                api_key_IP: "*"
+            }
+            $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/insertApiKey',JSON.stringify(payload)).done(function (result) { 
+                if(result.status === 'SUCCESS'){
+                    $(".error").addClass('hidden');
+                    $(".successMessage").append('<strong>API Key added!</strong>')
+                    $(".success").removeClass('hidden'); 
+                    setTimeout(function() {
+                        $(".success").addClass('hidden'); 
+                        $("#btnAddSubmit").removeAttr("disabled");
+                        $("#modalAdd").modal('toggle'); 
+                        __apiKeyManager();
+                    }, 2000)
+                }else{
+                    $("#btnAddSubmit").removeAttr("disabled");
+                    $(".errorMessage").append('<strong>'+result.message+'</strong>')
+                    $(".error").removeClass('hidden'); 
+                }
+            });
+        });    
+    }; 
+    //end added by jeelbert 06-01-21 
      var __attachFieldOfficeEvent = function(){
         ___debug("Field Office Event")
         var payload = { }
@@ -2637,5 +3011,7 @@ $.wms.dashboard = (function() {
         attachFormsEvent:  __attachFormsEvent,
         attachInformationSystemEvent : __attachInformationSystemEvent,
         attachFieldOfficeEvent : __attachFieldOfficeEvent,
+        smsManager : __smsManager,
+        apiKeyManager : __apiKeyManager,
     };
 }());

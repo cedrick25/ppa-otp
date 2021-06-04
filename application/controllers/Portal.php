@@ -124,7 +124,16 @@ class Portal extends CI_Controller {
 	{
 		$this->load->view('migrate_offline');
 	}
-
+	#start added by jeelbert 06-01-21 
+	public function sms_manager()
+	{
+		$this->load->view('sms_manager');
+	}
+	public function api_key_manager()
+	{
+		$this->load->view('api_key_manager');
+	}
+	#end added by jeelbert 06-01-21 
 	
 
 	
