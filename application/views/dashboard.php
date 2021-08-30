@@ -15,7 +15,7 @@
 
 				 			<center>
 				                <br>	
-				                	<h4>WELCOME <u><b class="loggedUserName"></b></u> TO THE UNIFIED ACCESS MANAGEMENT SOLUTION INFORMATION SYSTEM! </h4>
+				                	<h4>WELCOME <u><b class="loggedUserName"></b></u> TO THE One-Time-Password (OTP) System! </h4>
 			                </center>    
 							
 				            
@@ -39,10 +39,10 @@
 
 
 
-  <?php $this->load->view('widgets/feedback_rcv.php'); ?> 
+  <?php #$this->load->view('widgets/feedback_rcv.php'); ?> 
 
 
-  <?php $this->load->view('widgets/widgets.php'); ?> 
+  <?php #$this->load->view('widgets/widgets.php'); ?> 
 
 		
 

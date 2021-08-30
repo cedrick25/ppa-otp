@@ -97,7 +97,7 @@
                        <li id="navHome" class="loggedin"  style="display: none"><a href="dashboard"><i class="fa fa-home"></i> Dashboard</a></li>   
 
                       <!--  <li id="navRF" class="loggedin" style="display: none"><a href="rainfall_dashboard"><i class="fa fa-tint"></i> Rain Fall Monitoring</a></li>    -->
-                        <li class="dropdown adminTools access_maintenance" id="navMT" style="display: none">
+                        <!-- <li class="dropdown adminTools access_maintenance" id="navMT" style="display: none">
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i> Data Operations <b class="caret"></b></a>
                               <ul class="dropdown-menu">
                                 <li><a href="information_systems">Information Systems</a></li>
@@ -106,11 +106,8 @@
                                 <li><a href="user_position">User Position</a></li>
                                 <li><a href="user_level">User Level</a></li>
                                 <li><a href="field_offices">Field Offices</a></li>
-                                <!-- <li><a href="audit">Audit Trail</a></li>
-                                <li><a href="backup_restore">Backup & Restore</a></li> -->
-                                
-                            </ul>
-                        </li>
+                              </ul>
+                        </li> -->
 
 <!-- 
                         <li class="dropdown loggedin reports hidden" id="navRF" style="display: none">
