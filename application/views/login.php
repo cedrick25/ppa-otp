@@ -15,7 +15,7 @@
 							<div class="col-md-6 ">
 								<div class="hidden-xs"><br/><br/></div><br/>
 								<div class="panel panel-default panel-primary">
-								  <div class="panel-heading ppa-f24"><center>Unified Access Management Solution<br/>Information System</center></div>
+								  <div class="panel-heading ppa-f24"><center>One-Time Pin (OTP) System</center></div>
 								  <div class="panel-body">
 									
 
