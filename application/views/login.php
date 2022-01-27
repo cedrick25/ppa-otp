@@ -1,19 +1,37 @@
 <?php $this->load->view('templates/header.php'); ?> 
 <body style="background-color: #f1f1f1;">
 <?php $this->load->view('templates/nav.php'); ?> 
+<style>
+.container {
+	background: url(assets/img/bg-login.png);
+	/* Full height */
+	height: 100%; 
 
+	/* Center and scale the image nicely */
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.panel-default {
+    margin-top: 180px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 680px;
+
+}
+</style>
 
 <div class="container">
 
 	<div class="row" >
-		<div class="col-md-12" >
-				<div class="panel panel-default">
-					 <div class="panel-body" >
-					 	<div class="col-md-3">
+		<div class="col-md-12" style="height: 750px;">
+				<div class="">
+					 <div class="" >
+					 	<div class="col-md-7">
 							</div>		
 
-							<div class="col-md-6 ">
-								<div class="hidden-xs"><br/><br/></div><br/>
+							<div class="col-md-5 ">
 								<div class="panel panel-default panel-primary">
 								  <div class="panel-heading ppa-f24"><center>One-Time Pin (OTP) System</center></div>
 								  <div class="panel-body">
