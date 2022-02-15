@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title>UAMS - Parole and Probation Administration</title>
+	<title>OTP - Parole and Probation Administration</title>
 	<link rel="icon" href="<?php echo BASE_URL(); ?>assets/img/favicon-main-ppa.png">
 
 	<!-- BOOTSTRAP-->
