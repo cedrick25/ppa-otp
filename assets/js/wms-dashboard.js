@@ -2167,7 +2167,7 @@ $.wms.dashboard = (function() {
 
 
     }
-    //start added by jeelbert 06-01-21
+    //start added by nov21 2022
     var __smsManager = function(){
         $.wms.executeExternalGet('/ppa-api-uams/wsv1/api/fetchAllSMS').done(function (result) {
             if(result.status === 'SUCCESS'){
@@ -2218,6 +2218,7 @@ $.wms.dashboard = (function() {
                 var dtSMS = $("#tblSMS").DataTable({
                     dom: 'Blfrtip',
                     "scrollX": true,
+                    order: [[0, 'desc']],
                     buttons: [
                         {   extend: 'csv',
                             exportOptions: {
