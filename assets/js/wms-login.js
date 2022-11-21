@@ -57,6 +57,7 @@ $.wms.login = (function() {
                                
                             }             
 
+                                $("#divSuccess").removeClass("hidden");
                                 $("#divOtpEnter").addClass("hidden");
                                 $("#divOtpSuccess").removeClass("hidden");
                                 //alert("Login Success!")
