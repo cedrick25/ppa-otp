@@ -12,7 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 defined('SHOW_DEBUG_BACKTRACE') OR define('SHOW_DEBUG_BACKTRACE', TRUE);
-define('MIN_URL',"/ppa-uams/min?f=/ppa-uams/");
+define('MIN_URL',"/ppa-otp/min?f=/ppa-otp/");
 /*
 |--------------------------------------------------------------------------
 | File and Directory Modes
