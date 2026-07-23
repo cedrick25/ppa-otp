@@ -30,6 +30,9 @@ $.wms = (function() {
          ___ctx = "http://cmis.probation.gov.ph/api";
     }*/
 
+    var ___apiBase = (typeof window.API_BASE_URL === 'string' && window.API_BASE_URL !== '')
+        ? String(window.API_BASE_URL).replace(/\/$/, '')
+        : '/ppa-api-uams';
 
     var __setContext = function(newctx) {
         ___ctx = newctx;
@@ -248,6 +251,7 @@ $.wms = (function() {
     return {
         setContext:__setContext,
         getContext : __getContext,
+        apiBase : ___apiBase,
         getImgPath : __getImgPath,
         executePost : __executePost,
         executeExternalPost : __executeExternalPost,

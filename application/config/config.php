@@ -20,13 +20,30 @@ else
     $ipaddress = 'UNKNOWN';
 
 
-$allowed = array("192.168.1", "192.168.10", "192.168.20", "192.168.30", "192.168.40", "192.168.50", "192.168.60", "192.168.70", "192.168.80", "192.168.90", "192.168.100", "192.168.110", "172.168.0", "192.168.30","10.10.10","192.168.254","20.20.20");
-$uIP =explode(".",$ipaddress);
-array_pop($uIP);
-$uIP = implode(".",$uIP);
-#echo $uIP;
-if(!in_array($uIP, $allowed)){
-	die();
+/* X-Forwarded-For may be "client, proxy1, proxy2" — use the first IP only. */
+if (strpos($ipaddress, ',') !== FALSE) {
+	$ipaddress = trim(explode(',', $ipaddress)[0]);
+}
+
+$request_host = isset($_SERVER['HTTP_HOST']) ? strtolower(preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'])) : '';
+$public_hosts = array(
+	'otp.probation.gov.ph',
+	'localhost',
+);
+
+/* Skip LAN IP gate for known CMIS hosts / local HTTPS (IPv6 ::1 breaks the old check). */
+$skip_ip_gate = in_array($request_host, $public_hosts, TRUE)
+	|| $ipaddress === '::1'
+	|| $ipaddress === '127.0.0.1';
+
+if (!$skip_ip_gate) {
+	$allowed = array("192.168.1", "192.168.10", "192.168.20", "192.168.30", "192.168.40", "192.168.50", "192.168.60", "192.168.70", "192.168.80", "192.168.90", "192.168.100", "192.168.110", "172.168.0", "192.168.30","10.10.10","192.168.254","127.0.0");
+	$uIP = explode(".", $ipaddress);
+	array_pop($uIP);
+	$uIP = implode(".", $uIP);
+	if (!in_array($uIP, $allowed)) {
+		die();
+	}
 }
 #echo $_SERVER['SERVER_NAME'];
 /*if(in_array(,$allowed){

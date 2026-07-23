@@ -88,7 +88,7 @@
 	                USER_ID : $.cookie("USER_ID")
 	            }
 	            
-	            $.wms.executeExternalPost('/ppa-api-uams/wsv1/Api/getISUserByID',JSON.stringify(payload)).done(function (result2) {
+	            $.wms.executeExternalPost($.wms.apiBase + '/wsv1/Api/getISUserByID',JSON.stringify(payload)).done(function (result2) {
 	            	console.log(result2);
 	            	for(i=0;i<result2.payload.length;i++){
 	            		console.log(result2.payload[i]);

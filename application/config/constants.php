@@ -15,6 +15,16 @@ defined('SHOW_DEBUG_BACKTRACE') OR define('SHOW_DEBUG_BACKTRACE', TRUE);
 define('MIN_URL',"/ppa-otp/min?f=/ppa-otp/");
 /*
 |--------------------------------------------------------------------------
+| External API base path (no trailing slash)
+|--------------------------------------------------------------------------
+|
+| Change this when the API folder/URL changes, e.g. /ppa-api-uams → /ppa-api-otp.
+| Injected into JS as window.API_BASE_URL / $.wms.apiBase.
+|
+*/
+define('API_BASE_URL', '/ppa-api-otp');
+/*
+|--------------------------------------------------------------------------
 | File and Directory Modes
 |--------------------------------------------------------------------------
 |

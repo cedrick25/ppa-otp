@@ -32,7 +32,7 @@ $.wms.widget = (function() {
     var payload = {
         
     }
-    $.wms.executeExternalPost('/ppa-api-uams/wsv1/Api/getIs',JSON.stringify(payload)).done(function (result) {
+    $.wms.executeExternalPost($.wms.apiBase + '/wsv1/Api/getIs',JSON.stringify(payload)).done(function (result) {
         console.log(result)
         if(result.status == 'SUCCESS'){
             result.payload.forEach(function(data){
@@ -61,7 +61,7 @@ $.wms.widget = (function() {
     var payload = {
         
     }
-    $.wms.executeExternalPost('/ppa-api-uams/wsv1/Api/getIS_Users',JSON.stringify(payload)).done(function (result) {
+    $.wms.executeExternalPost($.wms.apiBase + '/wsv1/Api/getIS_Users',JSON.stringify(payload)).done(function (result) {
         console.log(result)
         if(result.status == 'SUCCESS'){
             result.payload.forEach(function(data){

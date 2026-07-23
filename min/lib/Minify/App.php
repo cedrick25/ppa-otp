@@ -80,7 +80,14 @@ class App extends Container
             };
             $varNames = array_map($prefixer, $propNames);
 
-            $vars = compact($varNames);
+            // PHP 8+: compact() warns on undefined vars (optional $min_* in config.php).
+            $defined = get_defined_vars();
+            $vars = array();
+            foreach ($varNames as $varName) {
+                if (array_key_exists($varName, $defined)) {
+                    $vars[$varName] = $defined[$varName];
+                }
+            }
 
             foreach ($varNames as $varName) {
                 if (isset($vars[$varName])) {

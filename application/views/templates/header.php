@@ -20,6 +20,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<link rel="stylesheet" href="<?php echo MIN_URL; ?>assets/css/select2.min.css"/>
 	<link rel="stylesheet" href="<?php echo MIN_URL; ?>assets/css/lobipanel.min.css"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<script>window.API_BASE_URL = <?php echo json_encode(API_BASE_URL); ?>;</script>
 	<!-- <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet"> -->
 	<style>
 	html {

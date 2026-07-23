@@ -55,13 +55,13 @@ $.wms.dashboard = (function() {
             falseAnchor.remove();
 
           
-            $.wms.executeExternalPost('/ppa-api-uams/wsv1/Cmis/AuditInsert',JSON.stringify(payload)).done(function (result) {
+            $.wms.executeExternalPost($.wms.apiBase + '/wsv1/Cmis/AuditInsert',JSON.stringify(payload)).done(function (result) {
             });
 
             var payload = {
                 "USER_EMAIL" : $.cookie("USER_EMAIL"),
             }
-            $.wms.executeExternalPost('/ppa-api-uams/wsv1/Api/doLogout',JSON.stringify(payload)).done(function (result) {
+            $.wms.executeExternalPost($.wms.apiBase + '/wsv1/Api/doLogout',JSON.stringify(payload)).done(function (result) {
 
             
                 var cookies = $.cookie();
@@ -93,7 +93,7 @@ $.wms.dashboard = (function() {
                        PASSWORD : $("#txtPasswordOld").val()
                     }
 
-                    $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/authenticate',JSON.stringify(payload)).done(function (result) {
+                    $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/authenticate',JSON.stringify(payload)).done(function (result) {
                         if(result.status == 'SUCCESS'){
                             PASSWORD1 = $("#txtPassword1").val()
                             PASSWORD2 = $("#txtPassword2").val()
@@ -104,7 +104,7 @@ $.wms.dashboard = (function() {
                                    USER_PASS : PASSWORD2
                                 }
 
-                                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/UpdateUser',JSON.stringify(payload)).done(function (result2) {
+                                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/UpdateUser',JSON.stringify(payload)).done(function (result2) {
                                     if(result2.status === 'SUCCESS'){
                                         
                                         alert("Successfully changed password. Please log-in again!")
@@ -116,7 +116,7 @@ $.wms.dashboard = (function() {
                                             "action" : action
                                             
                                         }
-                                        $.wms.executeExternalPost('/ppa-api-uams/wsv1/Cmis/AuditInsert',JSON.stringify(payload)).done(function (result) {
+                                        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/Cmis/AuditInsert',JSON.stringify(payload)).done(function (result) {
                                             var cookies = $.cookie();
                                             for(var cookie in cookies) {
                                                $.removeCookie(cookie);
@@ -303,7 +303,7 @@ $.wms.dashboard = (function() {
     var __loadAuditTrail = function(){
         ___debug("User List Event")
         var payload = { }
-        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getAuditTrail',JSON.stringify(payload)).done(function (result) {
+        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getAuditTrail',JSON.stringify(payload)).done(function (result) {
             ($.wms.debug() ? console.log(result) : "" )
             var data = [];
             for(i=0;i<result.payload.length;i++){
@@ -423,7 +423,7 @@ $.wms.dashboard = (function() {
     var __attachUserListEvent = function(){
         ___debug("User List Event")
         var payload = { }
-        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getAllUserList',JSON.stringify(payload)).done(function (result) {
+        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getAllUserList',JSON.stringify(payload)).done(function (result) {
             ($.wms.debug() ? console.log(result) : "" )
             var data = [];
             for(i=0;i<result.payload.length;i++){
@@ -514,7 +514,7 @@ $.wms.dashboard = (function() {
                 "FIELD_OFFICE" : $.cookie("FIELD_OFFICE"),
                 "USER_LEVEL_ID" : $.cookie("USER_LEVEL_ID")
              };
-            $.wms.executeExternalPost('/ppa-api-uams/wsv1/Pis/getAllFieldOffices',JSON.stringify(payload)).done(function (result) {
+            $.wms.executeExternalPost($.wms.apiBase + '/wsv1/Pis/getAllFieldOffices',JSON.stringify(payload)).done(function (result) {
                 if(result.status != undefined && result.status == "SUCCESS"){
                     result.payload.forEach(function(field){
                         
@@ -532,7 +532,7 @@ $.wms.dashboard = (function() {
            $(".sel_office_position").empty()
             var payload = { 
              };
-            $.wms.executeExternalPost('/ppa-api-uams/wsv1/Api/getUserPosition',JSON.stringify(payload)).done(function (result2) {
+            $.wms.executeExternalPost($.wms.apiBase + '/wsv1/Api/getUserPosition',JSON.stringify(payload)).done(function (result2) {
                 if(result2.status != undefined && result2.status == "SUCCESS"){
                     result2.payload.forEach(function(field){
                         
@@ -557,7 +557,7 @@ $.wms.dashboard = (function() {
 
                 $("#modalEdit").modal()
                 var payload = { USER_ID : id }
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getUserByID',JSON.stringify(payload)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getUserByID',JSON.stringify(payload)).done(function (result) {
                     ___debug(result);
 
 
@@ -612,7 +612,7 @@ $.wms.dashboard = (function() {
                                 "CREATED_BY" : "sysadmin",
                                 "USER_STATUS" : $("#ddUserStatus").val(),
                         }              
-                        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/UpdateUser',JSON.stringify(payload)).done(function (result) {
+                        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/UpdateUser',JSON.stringify(payload)).done(function (result) {
                             console.log(result);
                             if(result.status === 'SUCCESS'){
                                 var user_id = result.USER_ID;
@@ -642,7 +642,7 @@ $.wms.dashboard = (function() {
 
                 $("#modalEditSystem").modal()
                 var payload = { USER_ID : id }
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getUserByID',JSON.stringify(payload)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getUserByID',JSON.stringify(payload)).done(function (result) {
                     ___debug(result);
 
 
@@ -673,7 +673,7 @@ $.wms.dashboard = (function() {
                     var payload = {
                         USER_ID : USER_ID
                     }
-                    $.wms.executeExternalPost('/ppa-api-uams/wsv1/Api/getISUserByID',JSON.stringify(payload)).done(function (result2) {
+                    $.wms.executeExternalPost($.wms.apiBase + '/wsv1/Api/getISUserByID',JSON.stringify(payload)).done(function (result2) {
                         console.log(result2)
                         if(result2.status == 'SUCCESS'){
                             $("#user_sys").empty();
@@ -713,7 +713,7 @@ $.wms.dashboard = (function() {
                                 "USER_ID" : $(this).data("userid"),
                                 "STATUS" : $(this).val(),
                             }              
-                            $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/upsertIS_User',JSON.stringify(payload)).done(function (result) {
+                            $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/upsertIS_User',JSON.stringify(payload)).done(function (result) {
                                 console.log(result);
                                 if(result.status === 'SUCCESS'){
                                     var user_id = result.USER_ID;
@@ -767,7 +767,7 @@ $.wms.dashboard = (function() {
                         "STATUS" : $("#addddUserStatus").val(),
                 }                
 
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/AddUser',JSON.stringify(payload)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/AddUser',JSON.stringify(payload)).done(function (result) {
                     console.log(result);
                     if(result.status === 'SUCCESS'){
                         var user_id = result.USER_ID;
@@ -820,7 +820,7 @@ $.wms.dashboard = (function() {
         
         var payload = { }
         var headers = []
-        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getIs',JSON.stringify(payload)).done(function (result) {
+        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getIs',JSON.stringify(payload)).done(function (result) {
             ($.wms.debug() ? console.log(result) : "" )
             var data = [];
             for(i=0;i<result.payload.length;i++){
@@ -831,7 +831,7 @@ $.wms.dashboard = (function() {
         
             console.log(headers)
             var payload = { }
-            $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getIS_Users_Status',JSON.stringify(payload)).done(function (result) {
+            $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getIS_Users_Status',JSON.stringify(payload)).done(function (result) {
                 ($.wms.debug() ? console.log(result) : "" )
 
             
@@ -930,7 +930,7 @@ $.wms.dashboard = (function() {
     var __attachCaseloadListEvent = function(){
         ___debug("Caseload Event")
          var payload = { }
-            $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getAllUserList',JSON.stringify(payload)).done(function (result) {
+            $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getAllUserList',JSON.stringify(payload)).done(function (result) {
                 if(result.status != undefined && result.status == "SUCCESS"){
                     result.payload.forEach(function(field){
                         
@@ -944,7 +944,7 @@ $.wms.dashboard = (function() {
 
 
         var payload = { method : "view_caseload", "user_id" : $.cookie("USER_ID") }
-        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
+        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
             if(result.status === "SUCCESS"){
                 ($.wms.debug() ? console.log(result) : "" )
                 var data = [];
@@ -1011,7 +1011,7 @@ $.wms.dashboard = (function() {
                     var id = $(this).data('id');
                     console.log(id);
                     var payload = { id : id , method : "view_single" }
-                    $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
+                    $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
                         console.log(result)
                         if(result.status === 'SUCCESS'){
                             location.href="view_caseload?id="+id    
@@ -1028,7 +1028,7 @@ $.wms.dashboard = (function() {
                     console.log(id);
 
                     var payload = { id : id , method : "view_single" }
-                    $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
+                    $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
                         console.log(result)
                         if(result.status === 'SUCCESS'){
                             payload = result.payload
@@ -1059,7 +1059,7 @@ $.wms.dashboard = (function() {
                 method : "fwd"
 
             }          
-            $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
+            $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
                 console.log(result);
                 if(result.status === 'SUCCESS'){
                    alert("Success")
@@ -1088,7 +1088,7 @@ $.wms.dashboard = (function() {
                         "method" : "insert"
                 }                
 
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
                     console.log(result);
                     if(result.status === 'SUCCESS'){
                         
@@ -1126,7 +1126,7 @@ $.wms.dashboard = (function() {
         //Sent Caseload Report
         ___debug("Sent Caseload Event")
         var payload = { method : "fwd_caseload", "user_id" : $.cookie("USER_ID") }
-        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
+        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
             if(result.status === "SUCCESS"){
                 ($.wms.debug() ? console.log(result) : "" )
                 var data = [];
@@ -1196,7 +1196,7 @@ $.wms.dashboard = (function() {
                     var id = $(this).data('id');
                     console.log(id);
                     var payload = { id : id , method : "view_single" }
-                    $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
+                    $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
                         console.log(result)
                         if(result.status === 'SUCCESS'){
                             location.href="view_caseload?id="+id    
@@ -1213,7 +1213,7 @@ $.wms.dashboard = (function() {
                     console.log(id);
 
                     var payload = { id : id , method : "view_single" }
-                    $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
+                    $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
                         console.log(result)
                         if(result.status === 'SUCCESS'){
                             payload = result.payload
@@ -1238,7 +1238,7 @@ $.wms.dashboard = (function() {
         //Sent Caseload Report
         ___debug("Rcv Caseload Event")
         var payload = { method : "rcv_caseload", "user_id" : $.cookie("USER_ID") }
-        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
+        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
             if(result.status === "SUCCESS"){
                 ($.wms.debug() ? console.log(result) : "" )
                 var data = [];
@@ -1308,7 +1308,7 @@ $.wms.dashboard = (function() {
                     var id = $(this).data('id');
                     console.log(id);
                     var payload = { id : id , method : "view_single" }
-                    $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
+                    $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
                         console.log(result)
                         if(result.status === 'SUCCESS'){
                             location.href="view_caseload?id="+id    
@@ -1325,7 +1325,7 @@ $.wms.dashboard = (function() {
                     console.log(id);
 
                     var payload = { id : id , method : "view_single" }
-                    $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
+                    $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/caseload_reports',JSON.stringify(payload)).done(function (result) {
                         console.log(result)
                         if(result.status === 'SUCCESS'){
                             payload = result.payload
@@ -1353,7 +1353,7 @@ $.wms.dashboard = (function() {
     var __attachDeletedListEvent = function(){
         ___debug("User List Event")
         var payload = { table : $("#table").val() }
-        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getDeletedList',JSON.stringify(payload)).done(function (result) {
+        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getDeletedList',JSON.stringify(payload)).done(function (result) {
             if(result.status === "SUCCESS"){
                 ($.wms.debug() ? console.log(result) : "" )
                 var data = [];
@@ -1411,7 +1411,7 @@ $.wms.dashboard = (function() {
                         var id = $(this).data('id');
                         console.log(id);
                         var payload = { id : id, table : $("#table").val() }
-                        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/restoreDeleted',JSON.stringify(payload)).done(function (result) {
+                        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/restoreDeleted',JSON.stringify(payload)).done(function (result) {
                             __attachDeletedListEvent();
                         });    
                     }
@@ -1425,7 +1425,7 @@ $.wms.dashboard = (function() {
 
                     $("#modalEdit").modal()
                     var payload = { USER_ID : id }
-                    $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getUserByID',JSON.stringify(payload)).done(function (result) {
+                    $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getUserByID',JSON.stringify(payload)).done(function (result) {
                         ___debug(result);
                         var USER_ID  = result.payload.USER_ID;
                         var USER_NAME = result.payload.USER_NAME;
@@ -1466,7 +1466,7 @@ $.wms.dashboard = (function() {
                                     "CREATED_BY" : "sysadmin",
                                     "USER_STATUS" : $("#ddUserStatus").val(),
                             }              
-                            $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/UpdateUser',JSON.stringify(payload)).done(function (result) {
+                            $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/UpdateUser',JSON.stringify(payload)).done(function (result) {
                                 console.log(result);
                                 if(result.status === 'SUCCESS'){
                                     var user_id = result.USER_ID;
@@ -1513,7 +1513,7 @@ $.wms.dashboard = (function() {
                         "STATUS" : $("#addddUserStatus").val(),
                 }                
 
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/AddUser',JSON.stringify(payload)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/AddUser',JSON.stringify(payload)).done(function (result) {
                     console.log(result);
                     if(result.status === 'SUCCESS'){
                         var user_id = result.USER_ID;
@@ -1542,7 +1542,7 @@ $.wms.dashboard = (function() {
     var __attachUserLevelEvent = function(){
         ___debug("User List Event")
         var payload = { }
-        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getAllUserTypes',JSON.stringify(payload)).done(function (result) {
+        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getAllUserTypes',JSON.stringify(payload)).done(function (result) {
             ($.wms.debug() ? console.log(result) : "" )
             var data = [];
             for(i=0;i<result.payload.length;i++){
@@ -1600,7 +1600,7 @@ $.wms.dashboard = (function() {
 
             $('.add_modules').empty();
             $('.edit_modules').empty();
-            $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getAllUserTypeModules',JSON.stringify(payload)).done(function (result) {
+            $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getAllUserTypeModules',JSON.stringify(payload)).done(function (result) {
                     console.log(result);
 
                     if(result.status === 'SUCCESS'){
@@ -1628,7 +1628,7 @@ $.wms.dashboard = (function() {
 
 
                 var payload2 = { LEVEL_ID : id }
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getUserTypeByModulesByID',JSON.stringify(payload2)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getUserTypeByModulesByID',JSON.stringify(payload2)).done(function (result) {
                     console.log(result)
                     if(result.status === "SUCCESS"){
                         for(i=0;i<result.payload.length;i++){
@@ -1646,7 +1646,7 @@ $.wms.dashboard = (function() {
 
 
 
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getUserTypeByID',JSON.stringify(payload)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getUserTypeByID',JSON.stringify(payload)).done(function (result) {
                     ___debug(result);
                     var USER_LEVEL_ID  = result.payload.USER_LEVEL_ID;
                     var USER_LEVEL_NAME = result.payload.USER_LEVEL_NAME;
@@ -1691,7 +1691,7 @@ $.wms.dashboard = (function() {
                                 "STATUS" : $("#ddUserStatus").val(),
                                 "checkbox" : checkbox
                         }              
-                        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/UpdateUserType',JSON.stringify(payload)).done(function (result) {
+                        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/UpdateUserType',JSON.stringify(payload)).done(function (result) {
                             console.log(result);
                             if(result.status === 'SUCCESS'){
                                 var user_id = result.USER_ID;
@@ -1747,7 +1747,7 @@ $.wms.dashboard = (function() {
                 }  
 
 
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/AddUserType',JSON.stringify(payload)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/AddUserType',JSON.stringify(payload)).done(function (result) {
                     console.log(result);
                     if(result.status === 'SUCCESS'){
                         var user_id = result.USER_ID;
@@ -1792,7 +1792,7 @@ $.wms.dashboard = (function() {
     var __attachUserPositionEvent = function(){
         ___debug("User Position Event")
         var payload = { }
-        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getUserPosition',JSON.stringify(payload)).done(function (result) {
+        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getUserPosition',JSON.stringify(payload)).done(function (result) {
             ($.wms.debug() ? console.log(result) : "" )
             var data = [];
             for(i=0;i<result.payload.length;i++){
@@ -1860,7 +1860,7 @@ $.wms.dashboard = (function() {
 
 
 
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getUserPositionByID',JSON.stringify(payload)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getUserPositionByID',JSON.stringify(payload)).done(function (result) {
                     ___debug(result);
                     var USER_POSITION_ID  = result.payload.USER_POSITION_ID;
                     var USER_POSITION_NAME = result.payload.USER_POSITION_NAME;
@@ -1882,7 +1882,7 @@ $.wms.dashboard = (function() {
                                 "USER_POSITION_NAME" : $("#txtEditUserPositionName").val(),
                                 
                         }              
-                        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/UpdateUserPosition',JSON.stringify(payload)).done(function (result) {
+                        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/UpdateUserPosition',JSON.stringify(payload)).done(function (result) {
                             console.log(result);
                             if(result.status === 'SUCCESS'){
                                 var user_id = result.USER_ID;
@@ -1915,7 +1915,7 @@ $.wms.dashboard = (function() {
                 }  
 
 
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/AddUserPosition',JSON.stringify(payload)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/AddUserPosition',JSON.stringify(payload)).done(function (result) {
                     console.log(result);
                     if(result.status === 'SUCCESS'){
                         var user_id = result.USER_ID;
@@ -1956,7 +1956,7 @@ $.wms.dashboard = (function() {
     var __attachInformationSystemEvent = function(){
         ___debug("Information System Event")
         var payload = { }
-        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getIs',JSON.stringify(payload)).done(function (result) {
+        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getIs',JSON.stringify(payload)).done(function (result) {
             ($.wms.debug() ? console.log(result) : "" )
             var data = [];
             for(i=0;i<result.payload.length;i++){
@@ -2033,7 +2033,7 @@ $.wms.dashboard = (function() {
 
 
 
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getISbyID',JSON.stringify(payload)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getISbyID',JSON.stringify(payload)).done(function (result) {
                     ___debug(result);
                     var INFO_SYSTEM_ID  = result.payload.INFO_SYSTEM_ID;
                     var INFO_SYSTEM_NAME  = result.payload.INFO_SYSTEM_NAME;
@@ -2068,7 +2068,7 @@ $.wms.dashboard = (function() {
                                 "INFO_SYSTEM_LOGIN_URL" : $("#edit_INFO_SYSTEM_LOGIN_URL").val(),
                                 "INFO_SYSTEM_USER_URL" : $("#edit_INFO_SYSTEM_USER_URL").val(),
                         }              
-                        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/updateISbyID',JSON.stringify(payload)).done(function (result) {
+                        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/updateISbyID',JSON.stringify(payload)).done(function (result) {
                             console.log(result);
                             if(result.status === 'SUCCESS'){
                                 $("#modalEdit").modal("toggle")
@@ -2126,7 +2126,7 @@ $.wms.dashboard = (function() {
                 }  
 
 
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/addIS',JSON.stringify(payload)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/addIS',JSON.stringify(payload)).done(function (result) {
                     console.log(result);
                     if(result.status === 'SUCCESS'){
                         var user_id = result.USER_ID;
@@ -2169,7 +2169,7 @@ $.wms.dashboard = (function() {
     }
     //start added by nov21 2022
     var __smsManager = function(){
-        $.wms.executeExternalGet('/ppa-api-uams/wsv1/api/fetchAllSMS').done(function (result) {
+        $.wms.executeExternalGet($.wms.apiBase + '/wsv1/api/fetchAllSMS').done(function (result) {
             if(result.status === 'SUCCESS'){
                 var arr = [];
                 var p = result.payload;
@@ -2269,7 +2269,7 @@ $.wms.dashboard = (function() {
                             message_ID : id,
                             LASTMODIFIED_BY : $.cookie("USER_ID")
                         }
-                        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/cancelSms',JSON.stringify(payload)).done(function (result) { 
+                        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/cancelSms',JSON.stringify(payload)).done(function (result) { 
                            if(result.status === 'SUCCESS'){
                                 $(".error").addClass('hidden');
                                 $(".successMessage").append('<strong>'+result.message+'</strong>')
@@ -2292,7 +2292,7 @@ $.wms.dashboard = (function() {
             }
         });
         var payload = { }
-        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/fetchApiKeyByStatus',JSON.stringify(payload)).done(function (result) { 
+        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/fetchApiKeyByStatus',JSON.stringify(payload)).done(function (result) { 
             if(result.status === 'SUCCESS'){
                 $(".infoSystem").html('');
                 $(".infoSystem").append(`<option value="">-- Please Select Info System --</option>`);
@@ -2317,7 +2317,7 @@ $.wms.dashboard = (function() {
                     CREATED_BY: $.cookie("USER_ID")
                 }
                 console.log(payload)
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/insertSMSManually', JSON.stringify(payload)).done(function(result){
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/insertSMSManually', JSON.stringify(payload)).done(function(result){
                     if(result.status === 'SUCCESS'){
                         $(".error").addClass('hidden');
                         $(".successMessage").append('<strong>'+result.message+'</strong>')
@@ -2343,7 +2343,7 @@ $.wms.dashboard = (function() {
         });
     };
     var __apiKeyManager = function(){
-        $.wms.executeExternalGet('/ppa-api-uams/wsv1/api/fetchApiKeyByStatus').done(function (result) {
+        $.wms.executeExternalGet($.wms.apiBase + '/wsv1/api/fetchApiKeyByStatus').done(function (result) {
             if(result.status === 'SUCCESS'){
                 var p = result.payload;
                 var arr = [];
@@ -2418,7 +2418,7 @@ $.wms.dashboard = (function() {
                     var id = $(this).data('id');
                     var infoId = $(this).data('infoid');
                     var payload = { }
-                    $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getIs',JSON.stringify(payload)).done(function (result) { 
+                    $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getIs',JSON.stringify(payload)).done(function (result) { 
                         if(result.status === 'SUCCESS'){
                             $(".updateInfoSystem").html('');
                             $(".updateInfoSystem").append(`<option value="">-- Please Select Info System --</option>`);
@@ -2443,7 +2443,7 @@ $.wms.dashboard = (function() {
                             info_system_id : $(".updateInfoSystem").val(),
                             api_key_ID: id
                         }
-                        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/updateApiKey',JSON.stringify(payload)).done(function (result) { 
+                        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/updateApiKey',JSON.stringify(payload)).done(function (result) { 
                             if(result.status === 'SUCCESS'){
                                 $(".error").addClass('hidden');
                                 $(".successMessage").append('<strong>API Key updated</strong>')
@@ -2478,7 +2478,7 @@ $.wms.dashboard = (function() {
                             status : status,
                             api_key_ID: id
                         }
-                        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/updateApiKey',JSON.stringify(payload)).done(function (result) { 
+                        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/updateApiKey',JSON.stringify(payload)).done(function (result) { 
                             if(result.status === 'SUCCESS'){
                                 $(".error").addClass('hidden');
                                 $(".successMessage").append('<strong>API Key updated!</strong>')
@@ -2501,7 +2501,7 @@ $.wms.dashboard = (function() {
             }
         });
         var payload = { }
-        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getIs',JSON.stringify(payload)).done(function (result) { 
+        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getIs',JSON.stringify(payload)).done(function (result) { 
             if(result.status === 'SUCCESS'){
                 $(".infoSystem").html('');
                 $(".infoSystem").append(`<option value="">-- Please Select Info System --</option>`);
@@ -2523,7 +2523,7 @@ $.wms.dashboard = (function() {
                 info_system_id: $(".infoSystem").val(),
                 api_key_IP: "*"
             }
-            $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/insertApiKey',JSON.stringify(payload)).done(function (result) { 
+            $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/insertApiKey',JSON.stringify(payload)).done(function (result) { 
                 if(result.status === 'SUCCESS'){
                     $(".error").addClass('hidden');
                     $(".successMessage").append('<strong>API Key added!</strong>')
@@ -2546,7 +2546,7 @@ $.wms.dashboard = (function() {
      var __attachFieldOfficeEvent = function(){
         ___debug("Field Office Event")
         var payload = { }
-        $.wms.executeExternalPost('/ppa-api-uams/wsv1/Pis/fetchAllFieldOfficeRegion',JSON.stringify(payload)).done(function (result) {
+        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/Pis/fetchAllFieldOfficeRegion',JSON.stringify(payload)).done(function (result) {
             ($.wms.debug() ? console.log(result) : "" )
             var data = [];
             for(i=0;i<result.payload.length;i++){
@@ -2609,7 +2609,7 @@ $.wms.dashboard = (function() {
             
 
             var payload = { }
-            $.wms.executeExternalPost('/ppa-api-uams/wsv1/Pis/fetchAllRegion2',JSON.stringify(payload)).done(function (result) {
+            $.wms.executeExternalPost($.wms.apiBase + '/wsv1/Pis/fetchAllRegion2',JSON.stringify(payload)).done(function (result) {
                 console.log(result);
                 if(result.status != undefined && result.status == "SUCCESS"){
                     result.payload.forEach(function(field){
@@ -2635,7 +2635,7 @@ $.wms.dashboard = (function() {
 
 
 
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getFieldOfficeByID',JSON.stringify(payload)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getFieldOfficeByID',JSON.stringify(payload)).done(function (result) {
                     ___debug(result);
                     var ID  = result.payload.ID;
                     var REGION  = result.payload.REGION;
@@ -2663,7 +2663,7 @@ $.wms.dashboard = (function() {
                                 "ENABLED" : $("#upddFOStatus").val(),
                                 "IS_VIRTUAL" : 0,
                         }         
-                        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/UpdateFieldOffice',JSON.stringify(payload)).done(function (result) {
+                        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/UpdateFieldOffice',JSON.stringify(payload)).done(function (result) {
                             console.log(result);
                             if(result.status === 'SUCCESS'){
                                 $("#modalEdit").modal("toggle")
@@ -2699,7 +2699,7 @@ $.wms.dashboard = (function() {
                 }  
 
 
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/AddFieldOffice',JSON.stringify(payload)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/AddFieldOffice',JSON.stringify(payload)).done(function (result) {
                     console.log(result);
                     if(result.status === 'SUCCESS'){
                         var user_id = result.USER_ID;
@@ -2744,7 +2744,7 @@ $.wms.dashboard = (function() {
    var __attachFormsEvent = function(){
         ___debug("User List Event")
         var payload = { }
-        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getAllForms',JSON.stringify(payload)).done(function (result) {
+        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getAllForms',JSON.stringify(payload)).done(function (result) {
             ($.wms.debug() ? console.log(result) : "" )
             var data = [];
             for(i=0;i<result.payload.length;i++){
@@ -2812,7 +2812,7 @@ $.wms.dashboard = (function() {
                 $("#modalEdit").modal()
                 var payload = { form_page : form_page }
 
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getFormByPage',JSON.stringify(payload)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getFormByPage',JSON.stringify(payload)).done(function (result) {
                     ___debug(result);
                     var form_ID  = result.payload.form_ID;
                     var form_TITLE = result.payload.form_TITLE;
@@ -2832,7 +2832,7 @@ $.wms.dashboard = (function() {
                                 "form_ID" : $("#txtformID").val(),
                                 "form_CAPTION" : $("#txtformCaption").val(),
                         }              
-                        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/UpdateForm',JSON.stringify(payload)).done(function (result) {
+                        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/UpdateForm',JSON.stringify(payload)).done(function (result) {
                             console.log(result);
                             if(result.status === 'SUCCESS'){
                                 var user_id = result.USER_ID;
@@ -2888,7 +2888,7 @@ $.wms.dashboard = (function() {
                 }  
 
 
-                $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/AddUserType',JSON.stringify(payload)).done(function (result) {
+                $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/AddUserType',JSON.stringify(payload)).done(function (result) {
                     console.log(result);
                     if(result.status === 'SUCCESS'){
                         var user_id = result.USER_ID;
@@ -2937,7 +2937,7 @@ $.wms.dashboard = (function() {
     var __loadUserType = function(element){
         ___debug("Load User Type List")
         var payload = { }
-        $.wms.executeExternalPost('/ppa-api-uams/wsv1/api/getAllUserType',JSON.stringify(payload)).done(function (result) {
+        $.wms.executeExternalPost($.wms.apiBase + '/wsv1/api/getAllUserType',JSON.stringify(payload)).done(function (result) {
             ___debug(result)
             
             for(i=0;i<result.payload.length;i++){
