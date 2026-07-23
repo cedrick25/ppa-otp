@@ -12,7 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 defined('SHOW_DEBUG_BACKTRACE') OR define('SHOW_DEBUG_BACKTRACE', TRUE);
-define('MIN_URL',"/ppa-otp/min?f=/ppa-otp/");
+define('MIN_URL', 'https://otp.probation.gov.ph/ppa-otp/min/?f=/ppa-otp/');
 /*
 |--------------------------------------------------------------------------
 | External API base path (no trailing slash)
@@ -22,7 +22,7 @@ define('MIN_URL',"/ppa-otp/min?f=/ppa-otp/");
 | Injected into JS as window.API_BASE_URL / $.wms.apiBase.
 |
 */
-define('API_BASE_URL', '/ppa-api-otp');
+define('API_BASE_URL', '/ppa-api-uams');
 /*
 |--------------------------------------------------------------------------
 | File and Directory Modes

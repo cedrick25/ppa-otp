@@ -1,4 +1,12 @@
 <?php
+
+if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+	$_SERVER['HTTPS'] = 'on';
+}
+if (!empty($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+	$_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
+}
+
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 $ipaddress = '';
@@ -28,6 +36,7 @@ if (strpos($ipaddress, ',') !== FALSE) {
 $request_host = isset($_SERVER['HTTP_HOST']) ? strtolower(preg_replace('/:\d+$/', '', $_SERVER['HTTP_HOST'])) : '';
 $public_hosts = array(
 	'otp.probation.gov.ph',
+	'rpxy.probation.gov.ph',
 	'localhost',
 );
 
@@ -79,8 +88,7 @@ if (!$skip_ip_gate) {
 |
 */
 date_default_timezone_set('Asia/Manila');
-$config['base_url'] = " ";
-
+$config['base_url'] = 'https://otp.probation.gov.ph/ppa-otp/'; // real public URL
 
 /*
 |--------------------------------------------------------------------------
@@ -460,7 +468,8 @@ $config['sess_regenerate_destroy'] = FALSE;
 $config['cookie_prefix']	= '';
 $config['cookie_domain']	= '';
 $config['cookie_path']		= '/';
-$config['cookie_secure']	= FALSE;
+// $config['cookie_secure']	= FALSE;
+$config['cookie_secure'] = TRUE;
 $config['cookie_httponly'] 	= FALSE;
 
 /*
@@ -577,4 +586,5 @@ $config['rewrite_short_tags'] = FALSE;
 | Comma-separated:	'10.0.1.200,192.168.5.0/24'
 | Array:		array('10.0.1.200', '192.168.5.0/24')
 */
-$config['proxy_ips'] = '';
+// $config['proxy_ips'] = '';
+$config['proxy_ips'] = '192.168.1.240'; // IP of the proxy box
